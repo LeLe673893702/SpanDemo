@@ -41,9 +41,10 @@ class HotKeysFlowLayout(context: Context, attrs: AttributeSet) : TapFlowLayoutV2
                 expandAll()
 
             } else {
+                maxLine = defaultLine
+
                 expandView?.rotateAnimate(-180f, 200)
                 shrink{
-                    maxLine = defaultLine
                     requestLayout()
                 }
             }

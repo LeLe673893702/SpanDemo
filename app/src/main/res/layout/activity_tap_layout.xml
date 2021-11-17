@@ -7,10 +7,19 @@
     android:orientation="vertical"
     tools:context=".TapActivityLayout">
 
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:background="@color/black_alpha_30"
+       android:textSize="20dp"
+       android:text="sajfjasjfjafjas"
+       />
+
    <com.example.spandemo.HotKeysFlowLayout
        android:id="@+id/tbFlow"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
+       android:layout_marginTop="11dp"
        />
 
    <TextView

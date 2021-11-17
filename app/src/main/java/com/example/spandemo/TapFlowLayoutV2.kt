@@ -58,7 +58,6 @@ open class TapFlowLayoutV2 @JvmOverloads constructor(
     var calcWidth = 0
     var calcHeight = 0
 
-    private var isFirstExpand = false
 
     public interface OnTagClickListener {
         fun onTagClick(view: View?, position: Int, parent: TapFlowLayoutV2?): Boolean
@@ -96,22 +95,13 @@ open class TapFlowLayoutV2 @JvmOverloads constructor(
             (it as? ViewGroup)?.removeView(expandView)
         }
 
-        // wrap_content
-
-
-        val cCount: Int = childCount
-        calcHeight = 0
-        calcWidth = 0
-        var hasAddExpand = false
-
         calcAllViews(widthMeasureSpec, heightMeasureSpec, sizeWidth)
 
         if (!isExpand) {
             allHeight = calcHeight
         }
 
-        calcHeight = 0
-        calcWidth = 0
+
         // 测量前初始化相关的容器
         mAllViews.clear()
         mLineHeight.clear()
@@ -122,61 +112,12 @@ open class TapFlowLayoutV2 @JvmOverloads constructor(
             getChildMeasureSize(this)
         } ?: kotlin.run { Pair(0,0) }
         //二次计算，处理末尾需要增加展开标识 如果当前可以画完所有的内容则不添加展开标识
-        var count = 0
         if ((isExpand || tmpAllViews.size > maxLine) && expandView != null) {
-            val addExpandViewLine = (tmpAllViews.size).coerceAtMost(maxLine)
-            for (line in 0 until addExpandViewLine) {
-                var lineWidth = 0
-                var lineHeight = 0
-                // 没有到添加expandView所在行
-                if (line < addExpandViewLine - 1) {
-                    count += tmpAllViews[line].size
-                    getFormTmpViews(line)
-                    lineWidth = tmpLineWidth[line]
-                    lineHeight = tmpLineHeight[line]
-                } else {
-                    // 遍历
-                    val addExpandViewLines = mutableListOf<View?>()
-                    val lastLines = tmpAllViews[addExpandViewLine-1]
-                   for (i in 0 until  lastLines.size) {
-                       val (childW, childH) = getChildMeasureSize(lastLines[i])
-                       // 如果当前view + expandView 超过边界
-                       if (lineWidth + childW + expandWith > sizeWidth - paddingLeft - paddingRight) {
-                           // 如果view的宽度是expandView的两倍则缩小view的宽度，再添加
-                           // 反之，则不添加view，留位置给expandViews
-                           if (2 * expandWith <= childW) {
-                               measureChild(
-                                   lastLines[i],
-                                   MeasureSpec.makeMeasureSpec(childW - expandWith, MeasureSpec.EXACTLY),
-                                   MeasureSpec.makeMeasureSpec(childH, MeasureSpec.EXACTLY)
-                               )
-                               addExpandViewLines.add(lastLines[i])
-                               val (newChildW, newChildH) =  getChildMeasureSize(lastLines[i])
-                               lineWidth += newChildW
-                               lineHeight = Math.max(newChildH, lineHeight)
-                               count++
-                           }
-                           break
-                       } else {
-                           addExpandViewLines.add(lastLines[i])
-                           lineWidth += childW
-                           lineHeight = Math.max(childH, lineHeight)
-                           count++
-                       }
-                   }
-                    addExpandViewLines.add(expandView)
-                    lineWidth += expandWith
-                    lineHeight = Math.max(expandHeight, lineHeight)
-                    mAllViews.add(addExpandViewLines)
-                    mLineWidth.add(lineWidth)
-                    mLineHeight.add(lineHeight)
-                    addView(expandView)
-                }
-
-                // 最后一行需要再次计算
-                calcWidth = Math.max(lineWidth, calcWidth)
-                calcHeight += lineHeight
-            }
+            calcAddExpandViewSize(expandWith, sizeWidth, expandHeight)
+        } else {
+            mAllViews.addAll(tmpAllViews)
+            mLineWidth.addAll(tmpLineWidth)
+            mLineHeight.addAll(tmpLineHeight)
         }
 
         if (!isExpand) {
@@ -187,6 +128,80 @@ open class TapFlowLayoutV2 @JvmOverloads constructor(
             if (modeWidth == MeasureSpec.EXACTLY) sizeWidth else calcWidth + paddingLeft + paddingRight,
             if (modeHeight == MeasureSpec.EXACTLY) sizeHeight else calcHeight + paddingTop + paddingBottom
         )
+    }
+
+    private fun calcAddExpandViewSize(
+        expandWith: Int,
+        sizeWidth: Int,
+        expandHeight: Int
+    ) {
+        calcHeight = 0
+        calcWidth = 0
+        val addExpandViewLine = (tmpAllViews.size).coerceAtMost(maxLine)
+        for (line in 0 until addExpandViewLine) {
+            var lineWidth = 0
+            var lineHeight = 0
+            // 没有到添加expandView所在行
+            if (line < addExpandViewLine - 1) {
+                getFormTmpViews(line)
+                lineWidth = tmpLineWidth[line]
+                lineHeight = tmpLineHeight[line]
+            } else {
+                // 遍历
+                val addExpandViewLines = mutableListOf<View?>()
+                val lastLines = tmpAllViews[addExpandViewLine - 1]
+                var retainViewStartIndex: Int = -1
+                for (i in 0 until lastLines.size) {
+                    val (childW, childH) = getChildMeasureSize(lastLines[i])
+                    // 如果当前view + expandView 超过边界
+                    if (lineWidth + childW + expandWith > sizeWidth - paddingLeft - paddingRight) {
+                        // 如果view的宽度是expandView的3倍则缩小view的宽度，再添加
+                        // 反之，则不添加view，留位置给expandViews
+                        if (3 * expandWith <= childW) {
+                            measureChild(
+                                lastLines[i],
+                                MeasureSpec.makeMeasureSpec(
+                                    childW - expandWith,
+                                    MeasureSpec.EXACTLY
+                                ),
+                                MeasureSpec.makeMeasureSpec(childH, MeasureSpec.EXACTLY)
+                            )
+                            addExpandViewLines.add(lastLines[i])
+                            val (newChildW, newChildH) = getChildMeasureSize(lastLines[i])
+                            lineWidth += newChildW
+                            lineHeight = Math.max(newChildH, lineHeight)
+                            retainViewStartIndex = i + 1
+                        } else {
+                            retainViewStartIndex = i
+                        }
+                        break
+                    } else {
+                        addExpandViewLines.add(lastLines[i])
+                        lineWidth += childW
+                        lineHeight = Math.max(childH, lineHeight)
+                    }
+                }
+                addExpandViewLines.add(expandView)
+                lineWidth += expandWith
+                lineHeight = Math.max(expandHeight, lineHeight)
+                mAllViews.add(addExpandViewLines)
+                mLineWidth.add(lineWidth)
+                mLineHeight.add(lineHeight)
+                addView(expandView)
+
+                // 余下都隐藏
+                if (retainViewStartIndex != -1) {
+                    for (i in retainViewStartIndex until lastLines.size) {
+                        lastLines[i]?.visibility = INVISIBLE
+                    }
+                }
+
+            }
+
+            // 最后一行需要再次计算
+            calcWidth = Math.max(lineWidth, calcWidth)
+            calcHeight += lineHeight
+        }
     }
 
     private fun getFormTmpViews(line: Int) {
@@ -210,6 +225,8 @@ open class TapFlowLayoutV2 @JvmOverloads constructor(
             if (child.visibility == GONE) {
                 continue
             }
+
+            child.visibility = View.VISIBLE
 
             measureChild(child, widthMeasureSpec, heightMeasureSpec)
             val (childWidth, childHeight) = getChildMeasureSize(child)
