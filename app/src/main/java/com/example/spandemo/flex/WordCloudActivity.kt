@@ -26,7 +26,8 @@ class WordCloudActivity : AppCompatActivity() {
                 addView(textView, ViewGroup.MarginLayoutParams(-2, DensityUtils.dpToPx(30)).apply {
                     marginStart = DensityUtils.dpToPx(10)
                     topMargin = DensityUtils.dpToPx(10)
-                    setPadding(DensityUtils.dpToPx(8), DensityUtils.dpToPx(4), DensityUtils.dpToPx(8), DensityUtils.dpToPx(4))
+                    if (it == strings.size - 1) marginEnd = DensityUtils.dpToPx(10)
+                    textView.setPadding(DensityUtils.dpToPx(8), DensityUtils.dpToPx(4), DensityUtils.dpToPx(8), DensityUtils.dpToPx(4))
                 })
             }
         }

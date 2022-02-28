@@ -11,9 +11,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.spandemo.databinding.ActivityClickBinding;
 
 public class ClickActivity extends AppCompatActivity {
+    private ValueAnimator colorAnimator = ValueAnimator
+            .ofObject(new ArgbEvaluator(),
+                    ContextCompat.getColor(this, R.color.crd_review_replay_color_animator),
+                    ContextCompat.getColor(this, R.color.black));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,5 @@ public class ClickActivity extends AppCompatActivity {
         startActivity(intent);
         Log.d("MainActivity", "finish");
     }
-
 
 }

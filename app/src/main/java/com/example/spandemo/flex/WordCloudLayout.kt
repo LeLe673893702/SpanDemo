@@ -18,29 +18,21 @@ class WordCloudLayout @JvmOverloads constructor(
     private var allViews : MutableList<MutableList<View>>?= null
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        var parentHeight = 0
-        var parentWidth = 0
 
-        var lineHeight = 0
-        var lineWidth = 0
 
-        allViews = MutableList(maxLineCount) {
-            mutableListOf()
-        }
 
         // 单行计算
-        if (childCount < wrapCount) {
-            children.forEach {view->
-                measureChildWithMargins(view, widthMeasureSpec, 0, heightMeasureSpec, 0)
-                val (childMeasuredWidth, childMeasuredHeight) = getChildMeasureSize(view)
-                // 一行宽度累加
-                parentWidth += childMeasuredWidth
-                // 一行高度取最大
-                parentHeight = max(parentHeight, childMeasuredHeight)
-            }
+        allViews = mutableListOf()
+        if (childCount <= wrapCount) {
             allViews?.add(children.toMutableList())
-            setMeasuredDimension(parentWidth + paddingLeft + paddingRight,
-                parentHeight + paddingTop + paddingBottom)
+            // 测量单行
+            val (lineWidth, lineHeight) = measureColumnView(
+                allViews!!.first(),
+                widthMeasureSpec,
+                heightMeasureSpec
+            )
+            setMeasuredDimension(lineWidth + paddingLeft + paddingRight,
+                lineHeight + paddingTop + paddingBottom)
             return
         }
 
@@ -52,33 +44,56 @@ class WordCloudLayout @JvmOverloads constructor(
          *  {1, 3, 5}
          *  {2, 4, 6}
          */
+
+        var parentHeight = 0
+        var parentWidth = 0
+        allViews = MutableList(maxLineCount) {
+            mutableListOf()
+        }
         children.filterIndexed { index, _ -> index < maxLineCount * wrapCount }
             .flatMapIndexed { index: Int, view: View ->
                 allViews?.get(index % maxLineCount)?.add(view)
                 allViews!!
             }.forEach { lineViews ->
-                lineViews.forEach {  view->
-                    measureChildWithMargins(view, widthMeasureSpec, 0, heightMeasureSpec, 0)
-                    val (childMeasuredWidth, childMeasuredHeight) = getChildMeasureSize(view)
-
-                    // 一行宽度累加
-                    lineWidth += childMeasuredWidth
-                    // 一行高度取最大
-                    lineHeight = max(lineHeight, childMeasuredHeight)
-                }
+                // 测量单行
+                val (lineWidth, lineHeight) = measureColumnView(
+                    lineViews,
+                    widthMeasureSpec,
+                    heightMeasureSpec
+                )
                 // 换行高度累加
                 parentHeight += lineHeight
                 // 换行取最大宽度
                 parentWidth = max(parentWidth, lineWidth)
                 lineHeights.add(lineHeight)
-
-                // 重置
-                lineHeight = 0
-                lineWidth = 0
             }
 
         setMeasuredDimension(parentWidth + paddingLeft + paddingRight,
         parentHeight + paddingTop + paddingBottom)
+    }
+
+    /**
+     * 测量单行
+     */
+    private fun measureColumnView(
+        lineViews: MutableList<View>,
+        widthMeasureSpec: Int,
+        heightMeasureSpec: Int
+    ): Pair<Int, Int> {
+        // 重置
+        var lineHeight = 0
+        var lineWidth = 0
+        lineViews.forEach { view ->
+            measureChildWithMargins(view, widthMeasureSpec, 0, heightMeasureSpec, 0)
+
+            val (childMeasuredWidth, childMeasuredHeight) = getChildMeasureSize(view)
+
+            // 一行宽度累加
+            lineWidth += childMeasuredWidth
+            // 一行高度取最大
+            lineHeight = max(lineHeight, childMeasuredHeight)
+        }
+        return Pair(lineWidth, lineHeight)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -86,35 +101,47 @@ class WordCloudLayout @JvmOverloads constructor(
             return
         }
         // 单行按照横向顺序排列
-        if ((allViews?.size?:0) < 2){
-            allViews?.forEachIndexed {lineIndex, lineViews->
-                val left = l + paddingLeft
-                lineViews.forEach { view ->
-                    view.layout(left, top, left + view.measuredWidth, b + lineHeights[lineIndex])
-                }
-            }
+        if (childCount <= wrapCount){
+            layoutColumnView(l + paddingLeft, allViews!!.first(), t + paddingTop)
             return
         }
 
-
         allViews?.let {
-            var top = t + paddingTop
+            var childTop = t + paddingTop
             it.forEachIndexed { lineIndex, lineViews ->
-                // 换行 left 重置
-                var left = l + paddingLeft
-                lineViews.forEachIndexed { index, view ->
-                    val currentLp = view.layoutParams as MarginLayoutParams
-                    val lv = left + currentLp.leftMargin
-                    val rv = lv  + view.measuredWidth
-                    val tv = top + currentLp.topMargin
-                    val bv = tv + view.measuredHeight
-                    view.layout(lv, tv, rv, bv)
-                    left = rv + currentLp.rightMargin
-                }
+                childTop = layoutColumnView(l + paddingLeft, lineViews, childTop)
                 // 换行高度增加
-                top += lineHeights[lineIndex]
+                childTop += lineHeights[lineIndex]
             }
         }
+    }
+
+    /**
+     * 放置单行view
+     */
+    private fun layoutColumnView(
+        initLeft: Int,
+        lineViews: MutableList<View>,
+        initTop: Int
+    ): Int {
+        // 换行 left 重置
+        var childLeft = initLeft
+        var lp: MarginLayoutParams?=null
+        lineViews.forEachIndexed { index, view ->
+            lp = view.layoutParams as MarginLayoutParams
+
+            childLeft += lp!!.leftMargin
+            val childRight = childLeft + view.measuredWidth
+            val childTop = initTop + lp!!.topMargin
+            val childBottom = childTop + view.measuredHeight
+
+            view.layout(childLeft, childTop, childRight, childBottom)
+
+            // 递增
+            childLeft = childRight + lp!!.rightMargin
+        }
+
+        return initTop + (lp?.bottomMargin?:0)
     }
 
     private fun getChildMeasureSize(childView: View?): Pair<Int, Int> {
