@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SpanDemo</string>
+    <string name="app_info">appinfo</string>
 </resources>

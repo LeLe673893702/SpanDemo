@@ -27,6 +27,12 @@ android {
     }
 }
 
+configurations {
+    getByName("implementation") {
+        resolutionStrategy.failOnChangingVersions()
+    }
+}
+
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.3.1'

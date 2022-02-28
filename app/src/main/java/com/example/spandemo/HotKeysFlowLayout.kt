@@ -23,6 +23,7 @@ class HotKeysFlowLayout(context: Context, attrs: AttributeSet) : TapFlowLayoutV2
                 DensityUtils.dpToPx(30),
                 DensityUtils.dpToPx(30)
             ).apply {
+                context.getString(R.string.app_info)
                 setMargins(
                     DensityUtils.dpToPx(4),
                     DensityUtils.dpToPx(6),

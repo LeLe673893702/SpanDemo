@@ -5,10 +5,14 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.3888888888888889" />
         <entry key="app/src/main/res/drawable-v24/splash.xml" value="0.25833333333333336" />
+        <entry key="app/src/main/res/layout/activity_click.xml" value="0.20181634712411706" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2572463768115942" />
         <entry key="app/src/main/res/layout/activity_tap_layout.xml" value="0.4015625" />
         <entry key="app/src/main/res/layout/activity_view.xml" value="0.5172101449275363" />
+        <entry key="app/src/main/res/layout/activity_word_cloud.xml" value="0.3385416666666667" />
         <entry key="app/src/main/res/layout/gd_guide_hot_keys_item_view.xml" value="0.4015625" />
+        <entry key="app/src/main/res/layout/test_dialog_fragment_layout.xml" value="0.23107971745711403" />
+        <entry key="app/src/main/res/layout/test_dialog_fragmentlayout.xml" value="0.23107971745711403" />
         <entry key="app/src/main/res/layout/view_inflate_layout.xml" value="0.5172101449275363" />
       </map>
     </option>
