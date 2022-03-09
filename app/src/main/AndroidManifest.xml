@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.spandemo"
     >
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -11,9 +11,9 @@
         android:supportsRtl="false"
         android:theme="@style/taptap_theme"
         >
+
         <activity
-            android:name=".flex.WordCloudActivity"
-            android:exported="true"
+            android:name=".youtueb.YoutubeActivity"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,12 +21,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".nest.NestWithRecyclerViewActivity">
+
+        </activity>
+        <activity
+            android:name=".flex.WordCloudActivity"
+            android:exported="true"
+            />
         <activity
             android:name=".ClickActivity"
             android:exported="true"
-            >
-
-        </activity>
+            />
         <activity
             android:name=".TapActivityLayout"
             android:exported="true"
@@ -44,7 +49,6 @@
             android:name=".MainActivity"
             android:exported="true"
             />
-
     </application>
 
 </manifest>
