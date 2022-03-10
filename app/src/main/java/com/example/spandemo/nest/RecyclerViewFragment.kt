@@ -9,9 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spandemo.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 
 /**
@@ -33,7 +37,8 @@ class RecyclerViewFragment : Fragment() {
         view.findViewById<RecyclerView>(R.id.rv_item).apply {
             val lm = LinearLayoutManager(context)
             layoutManager = lm
-            adapter = StringAdapter(context)
+            val datas = MutableList(200, {"213"})
+            adapter = StringAdapter(context, datas)
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
@@ -47,6 +52,17 @@ class RecyclerViewFragment : Fragment() {
                     }
                 }
             })
+
+            lifecycleScope.launchWhenStarted {
+                withContext(Dispatchers.IO) {
+                    delay(15000)
+                }
+
+                val removeList = datas.subList(10, datas.size)
+                val size = removeList.size
+                datas.removeAll(removeList)
+                (adapter as StringAdapter).notifyItemRangeChanged(10, size)
+            }
         }
     }
 
@@ -56,7 +72,7 @@ class RecyclerViewFragment : Fragment() {
             RecyclerViewFragment()
     }
 
-    class StringAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    class StringAdapter(private val context: Context, var datas: MutableList<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
         }
@@ -84,6 +100,6 @@ class RecyclerViewFragment : Fragment() {
 //            Log.d("RecyclerViewFragment", "onBindViewHolder -- $position")
         }
 
-        override fun getItemCount() = 200
+        override fun getItemCount() = datas.size
     }
 }

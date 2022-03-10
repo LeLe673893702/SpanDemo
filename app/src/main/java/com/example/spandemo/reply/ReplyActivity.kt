@@ -2,13 +2,18 @@ package com.example.spandemo.reply
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.example.spandemo.R
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
+import java.lang.Exception
+import kotlin.math.max
 
 class ReplyActivity : AppCompatActivity() {
     val data = mutableListOf<Comment>()
@@ -21,14 +26,37 @@ class ReplyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reply)
-
+        var rv: RecyclerView?=null
         findViewById<RecyclerView>(R.id.rv_comment)?.run {
             adapter = commentAdapter
+            rv = this
             layoutManager = LinearLayoutManager(context)
         }
-        data.addAll(generaData())
+        data.addAll(MutableList(10) {
+            Comment(content = "置顶---$it")
+        })
+        data.addAll(generaData(20))
+
         commentAdapter.setList(data)
 
+        lifecycleScope.launchWhenStarted {
+            withContext(Dispatchers.IO) {
+                delay(10000)
+            }
+
+            withContext(Dispatchers.Main) {
+                val size = commentAdapter.data.size
+                val removeList = commentAdapter.data.subList(10, commentAdapter.itemCount)
+                val removeSize = removeList.size
+
+                commentAdapter.data.removeAll(removeList)
+//            commentAdapter.addData(generaData(5))
+//            val addList = generaData(5)
+//            commentAdapter.notifyDataSetChanged()
+                commentAdapter.notifyItemRangeChanged(10, removeSize - 10)
+//            rv?.scrollToPosition(10)
+            }
+        }
 
     }
 
@@ -46,9 +74,9 @@ class ReplyActivity : AppCompatActivity() {
         }
     }
 
-    private fun generaData() : MutableList<Comment> {
+    private fun generaData(count: Int) : MutableList<Comment> {
         val comments = mutableListOf<Comment>()
-        repeat(10) {commentIndex->
+        repeat(count) {commentIndex->
             val comment = Comment(content = "第 $commentIndex 条评论：")
             comment.childNode = mutableListOf()
 

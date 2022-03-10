@@ -12,15 +12,17 @@
         android:theme="@style/taptap_theme"
         >
 
-        <activity
-            android:name=".reply.ReplyActivity"
-            android:name=".youtueb.YoutubeActivity"
-            >
+        <activity android:name=".reply.ReplyActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".youtueb.YoutubeActivity"
+            >
+
         </activity>
         <activity android:name=".nest.NestWithRecyclerViewActivity">
 

@@ -39,6 +39,7 @@ public class PhotoWebView extends WebView {
 //                    pipItem.setEnabled(true);
 //                    pipItem.setAlpha(1.0f);
 //                });
+                Log.d("YoutubeProxy", "loaded");
             }
         }
     }
@@ -166,7 +167,7 @@ public class PhotoWebView extends WebView {
     }
 
     void loadUrl() {
-        loadDataWithBaseURL("https://messenger.telegram.org/", String.format(Locale.US, youtubeFrame, "MubLylzx1Kg", 0), "text/html", "UTF-8", "https://youtube.com");
+        loadDataWithBaseURL("", String.format(Locale.US, youtubeFrame, "MubLylzx1Kg", 0), "text/html", "UTF-8", "https://youtube.com");
     }
 
 }

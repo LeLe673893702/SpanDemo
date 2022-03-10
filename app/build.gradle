@@ -51,7 +51,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0' //在kotlin项目但非jetpack 架构项目中引入协程 api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1"
-    implementation("androidx.recyclerview:recyclerview:1.2.1")
 
 
 }
