@@ -43,7 +43,15 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.core:core-animation:1.0.0-alpha02'
     testImplementation 'junit:junit:4.+'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9"
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation "com.bytedance.tools.codelocator:codelocator-core:1.0.0"
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0' //在kotlin项目但非jetpack 架构项目中引入协程 api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1"
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
+
+
 }

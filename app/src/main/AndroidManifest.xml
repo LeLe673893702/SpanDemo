@@ -12,8 +12,7 @@
         android:theme="@style/taptap_theme"
         >
         <activity
-            android:name=".flex.WordCloudActivity"
-            android:exported="true"
+            android:name=".reply.ReplyActivity"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,12 +20,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".text.AutoLineActivity">
+
+        </activity>
+        <activity
+            android:name=".coor.ConstraintLayoutActivity"
+            android:exported="false"
+            />
+        <activity android:name=".scroll.ScrollToolbarActivity"></activity>
+        <activity
+            android:name=".flex.WordCloudActivity"
+            android:exported="true"
+            />
         <activity
             android:name=".ClickActivity"
             android:exported="true"
-            >
-
-        </activity>
+            />
         <activity
             android:name=".TapActivityLayout"
             android:exported="true"
@@ -44,7 +53,6 @@
             android:name=".MainActivity"
             android:exported="true"
             />
-
     </application>
 
 </manifest>

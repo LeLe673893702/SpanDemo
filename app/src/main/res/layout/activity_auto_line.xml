@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".text.AutoLineActivity"
+    >
+
+    <com.example.spandemo.text.AutoLineTextView
+        android:id="@+id/tv_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/teal_200"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/iv_bottom"
+        android:ellipsize="end"
+        android:textSize="30dp"
+        android:text="21333333333333312312312412421\n24124\n231"
+        />
+
+    <ImageView
+        android:id="@+id/iv_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:layout_alignParentBottom="true"
+        />
+
+</RelativeLayout>

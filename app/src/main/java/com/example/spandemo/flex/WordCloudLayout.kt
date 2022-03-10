@@ -19,8 +19,6 @@ class WordCloudLayout @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
-
-
         // 单行计算
         allViews = mutableListOf()
         if (childCount <= wrapCount) {
