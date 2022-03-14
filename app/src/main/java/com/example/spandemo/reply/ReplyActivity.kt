@@ -41,7 +41,7 @@ class ReplyActivity : AppCompatActivity() {
 
         lifecycleScope.launchWhenStarted {
             withContext(Dispatchers.IO) {
-                delay(10000)
+                delay(5000)
             }
 
             withContext(Dispatchers.Main) {
@@ -50,10 +50,11 @@ class ReplyActivity : AppCompatActivity() {
                 val removeSize = removeList.size
 
                 commentAdapter.data.removeAll(removeList)
-//            commentAdapter.addData(generaData(5))
 //            val addList = generaData(5)
 //            commentAdapter.notifyDataSetChanged()
-                commentAdapter.notifyItemRangeChanged(10, removeSize - 10)
+                commentAdapter.notifyItemRangeChanged(10, removeSize)
+                            commentAdapter.addData(generaData(5))
+//
 //            rv?.scrollToPosition(10)
             }
         }

@@ -53,16 +53,16 @@ class RecyclerViewFragment : Fragment() {
                 }
             })
 
-            lifecycleScope.launchWhenStarted {
-                withContext(Dispatchers.IO) {
-                    delay(15000)
-                }
-
-                val removeList = datas.subList(10, datas.size)
-                val size = removeList.size
-                datas.removeAll(removeList)
-                (adapter as StringAdapter).notifyItemRangeChanged(10, size)
-            }
+//            lifecycleScope.launchWhenStarted {
+//                withContext(Dispatchers.IO) {
+//                    delay(15000)
+//                }
+//
+//                val removeList = datas.subList(10, datas.size)
+//                val size = removeList.size
+//                datas.removeAll(removeList)
+//                (adapter as StringAdapter).notifyItemRangeChanged(10, size)
+//            }
         }
     }
 

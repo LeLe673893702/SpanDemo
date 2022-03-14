@@ -13,11 +13,7 @@
         >
 
         <activity android:name=".reply.ReplyActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".youtueb.YoutubeActivity"
@@ -25,15 +21,20 @@
 
         </activity>
         <activity android:name=".nest.NestWithRecyclerViewActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".text.AutoLineActivity">
 
         </activity>
         <activity
             android:name=".coor.ConstraintLayoutActivity"
-            android:exported="false"
-            />
+            >
+
+        </activity>
         <activity android:name=".scroll.ScrollToolbarActivity"></activity>
         <activity
             android:name=".flex.WordCloudActivity"
