@@ -9,11 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spandemo.R
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
@@ -37,8 +40,14 @@ class RecyclerViewFragment : Fragment() {
         view.findViewById<RecyclerView>(R.id.rv_item).apply {
             val lm = LinearLayoutManager(context)
             layoutManager = lm
-            val datas = MutableList(200, {"213"})
-            adapter = StringAdapter(context, datas)
+            lifecycleScope.launchWhenStarted {
+                val a = async(Dispatchers.IO) {
+                    delay(10000)
+                    MutableList(20, {"213"})
+                }
+                adapter = StringAdapter(context, a.await())
+            }
+
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
@@ -46,6 +55,7 @@ class RecyclerViewFragment : Fragment() {
                     if (visiblePos == 0) {
                         lm.findViewByPosition(visiblePos)?.let { view->
                             view.findViewById<ImageView>(R.id.iv_down_arrow)?.let {iv->
+                                val drawable = ContextCompat.getDrawable(context, R.drawable.gd_preview_unselect_indicator_drawable)
                                 Log.d("RecyclerViewFragment", "findViewByPosition -- $iv --- $dy")
                             }
                         }
