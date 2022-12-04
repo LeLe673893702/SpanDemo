@@ -92,22 +92,22 @@ class RecyclerViewFragment : Fragment() {
         }
 
         override fun getItemViewType(position: Int): Int {
-            return if (position == 0) 0 else 1
+            return 0
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 //            Log.d("RecyclerViewFragment", "onCreateViewHolder")
-            if (viewType == 0) {
-                return TopViewHolder(LayoutInflater.from(context).inflate(R.layout.recycler_fragment_item_top_view, parent, false))
-            }
-            return ViewHolder(TextView(context).apply {
-                layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 150)
-                text = "12312"
-            })
+//            if (viewType == 0) {
+//                return TopViewHolder(LayoutInflater.from(context).inflate(R.layout.recycler_fragment_item_top_view, parent, false))
+//            }
+            return ViewHolder(LayoutInflater.from(context).inflate(R.layout.string_item_layout, parent, false))
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 //            Log.d("RecyclerViewFragment", "onBindViewHolder -- $position")
+            holder.itemView.findViewById<TextView>(R.id.string_item).apply {
+                text = "Track $position"
+            }
         }
 
         override fun getItemCount() = datas.size
