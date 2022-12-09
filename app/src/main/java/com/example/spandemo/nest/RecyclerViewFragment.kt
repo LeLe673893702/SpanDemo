@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -37,12 +38,15 @@ class RecyclerViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.findViewById<HorizontalScrollView>(R.id.header_scroll_view).apply {
+
+        }
         view.findViewById<RecyclerView>(R.id.rv_item).apply {
             val lm = LinearLayoutManager(context)
             layoutManager = lm
             lifecycleScope.launchWhenStarted {
                 val a = async(Dispatchers.IO) {
-                    delay(10000)
+//                    delay(10000)
                     MutableList(20, {"213"})
                 }
                 adapter = StringAdapter(context, a.await())
