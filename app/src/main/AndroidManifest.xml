@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.spandemo"
     >
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -11,39 +13,29 @@
         android:supportsRtl="false"
         android:theme="@style/taptap_theme"
         >
-
-        <activity android:name=".reply.ReplyActivity">
-
-        </activity>
         <activity
-            android:name=".youtueb.YoutubeActivity"
+            android:name=".handler.HandlerActivity"
+            android:exported="true"
             >
-
-        </activity>
-        <activity android:name=".nest.NestWithRecyclerViewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".text.AutoLineActivity">
+        <activity android:name=".reply.ReplyActivity"></activity>
+        <activity android:name=".youtueb.YoutubeActivity"></activity>
+        <activity android:name=".nest.NestWithRecyclerViewActivity">
 
         </activity>
-        <activity
-            android:name=".coor.ConstraintLayoutActivity"
-            >
-
-        </activity>
-        <activity android:name=".scroll.ScrollToolbarActivity"></activity>
+        <activity android:name=".text.AutoLineActivity"></activity>
+        <activity android:name=".coor.ConstraintLayoutActivity"></activity>
+        <activity android:name=".scroll.ScrollToolbarActivity" />
         <activity
             android:name=".flex.WordCloudActivity"
             android:exported="true"
             />
-        <activity
-            android:name=".flex.WordCloudActivity"
-            android:exported="true"
-            />
+
         <activity
             android:name=".ClickActivity"
             android:exported="true"
