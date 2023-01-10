@@ -27,7 +27,7 @@ class SourceRecyclerViewAdapter(private val context: Context, var datas: Mutable
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         holder.itemView.findViewById<TextView>(R.id.string_item).apply {
-            text = "Track $position"
+            text = datas[position]
         }
     }
 

@@ -12,21 +12,15 @@ class RecyclerViewWrapper @JvmOverloads constructor(
     private var layoutListener: LayoutListener? = null
 
     override fun onMeasure(widthSpec: Int, heightSpec: Int) {
-        Log.e("SourceRecyclerViewActivity", "before onMeasure")
+//        Log.e("SourceRecyclerViewActivity", "before onMeasure")
 
         super.onMeasure(widthSpec, heightSpec)
 
-        Log.e("SourceRecyclerViewActivity", "after onMeasure")
+//        Log.e("SourceRecyclerViewActivity", "after onMeasure")
     }
 
     fun setLayoutListener(layoutListener: LayoutListener?) {
         this.layoutListener = layoutListener
-    }
-
-    override fun addView(child: View?) {
-        super.addView(child)
-        Log.e("SourceRecyclerViewActivity", "addView")
-
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -45,7 +39,7 @@ class RecyclerViewWrapper @JvmOverloads constructor(
     }
 
     override fun requestLayout() {
-        Log.e("SourceRecyclerViewActivity", "requestLayout")
+//        Log.e("SourceRecyclerViewActivity", "requestLayout")
         super.requestLayout()
     }
 }

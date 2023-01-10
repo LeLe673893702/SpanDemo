@@ -5,11 +5,15 @@ import android.util.Log
 import android.util.SparseArray
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.RecycledViewPool
 import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.example.spandemo.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import java.lang.reflect.Field
 
 class SourceRecyclerViewActivity : AppCompatActivity() {
@@ -17,7 +21,7 @@ class SourceRecyclerViewActivity : AppCompatActivity() {
         const val TAG = "SourceRecyclerViewActivity"
     }
     private val adapter by lazy {
-        SourceRecyclerViewAdapter(this, MutableList(100) { "" })
+        SourceRecyclerViewAdapter(this, MutableList(100) { "Tracker:$it" })
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +29,7 @@ class SourceRecyclerViewActivity : AppCompatActivity() {
         findViewById<RecyclerViewWrapper>(R.id.rv_source).run {
             layoutManager = LinearLayoutManagerWrapper(context).apply {
                 this.scrollListener = {
-//                    showMessage(this@run, "scollBy")
+                    showMessage(this@run, "scollBy")
                 }
             }
             adapter = this@SourceRecyclerViewActivity.adapter
@@ -53,6 +57,14 @@ class SourceRecyclerViewActivity : AppCompatActivity() {
                 }
 
             })
+        }
+
+        lifecycleScope.launchWhenStarted {
+            withContext(Dispatchers.IO) {
+                delay(10000)
+            }
+            adapter.datas[1] = "Tracker2222"
+            adapter.notifyItemChanged(1)
         }
     }
 
@@ -87,7 +99,7 @@ class SourceRecyclerViewActivity : AppCompatActivity() {
                 TAG,
                 """
                 $message,
-                mAttachedScrap（一缓） size is:${mAttached.maxSize}, 
+                mAttachedScrap（一缓） size is:${mAttached.maxSize}, current size is:${mAttached.size}, ${getAttachViewsInfo(mAttached)}, 
                 mCachedViews（二缓） max size is:$mViewCacheSize, current size is: ${mCached.size}, ${getMCachedViewsInfo(mCached)}${
                     getRVPoolInfo(
                         recyclerPoolClass,
@@ -133,6 +145,16 @@ class SourceRecyclerViewActivity : AppCompatActivity() {
             e.printStackTrace()
             "  "
         }
+    }
+
+    private fun getAttachViewsInfo(viewHolders: ArrayList<RecyclerView.ViewHolder>): String {
+        var i = 0
+        val s = viewHolders.fold(StringBuilder("mAttachScrap (一缓) info: ")) { acc, viewHolder ->
+            val itemView = viewHolder.itemView
+            acc.append("mAttachScrap[${i++}] is ${itemView.findViewById<TextView>(R.id.string_item).text}")
+            acc.append("\n")
+        }
+        return s.toString()
     }
 
     private fun getMCachedViewsInfo(viewHolders: ArrayList<RecyclerView.ViewHolder>): String {

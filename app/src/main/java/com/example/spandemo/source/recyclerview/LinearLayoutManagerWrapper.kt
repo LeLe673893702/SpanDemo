@@ -12,7 +12,7 @@ class LinearLayoutManagerWrapper(context: Context?) : LinearLayoutManager(contex
         recycler: RecyclerView.Recycler?,
         state: RecyclerView.State?
     ): Int {
-        Log.e("SourceRecyclerViewActivity", "scrollVerticallyBy")
+//        Log.e("SourceRecyclerViewActivity", "scrollVerticallyBy")
 
         val a = super.scrollVerticallyBy(dy, recycler, state)
         scrollListener?.invoke()
