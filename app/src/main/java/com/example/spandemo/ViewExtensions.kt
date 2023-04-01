@@ -65,15 +65,18 @@ fun View.hideAnimate() {
     animatorSet.duration = 200
     animatorSet.interpolator = AccelerateInterpolator()
     animatorSet.addListener(object : Animator.AnimatorListener {
-        override fun onAnimationStart(animation: Animator?) {}
+        override fun onAnimationStart(animation: Animator) {
+        }
 
-        override fun onAnimationEnd(animation: Animator?) {
+        override fun onAnimationEnd(animation: Animator) {
             visibility = View.GONE
         }
 
-        override fun onAnimationCancel(animation: Animator?) {}
+        override fun onAnimationCancel(animation: Animator) {
+        }
 
-        override fun onAnimationRepeat(animation: Animator?) {}
+        override fun onAnimationRepeat(animation: Animator) {
+        }
     })
     animatorSet.start()
 }

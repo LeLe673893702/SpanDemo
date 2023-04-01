@@ -1,13 +1,11 @@
-package com.example.spandemo.flex
+package com.example.spandemo.word
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.marginTop
 import com.example.spandemo.DensityUtils
 import com.example.spandemo.R
 

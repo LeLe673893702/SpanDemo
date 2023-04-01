@@ -13,8 +13,10 @@
         android:supportsRtl="false"
         android:theme="@style/taptap_theme"
         >
+        <activity android:name=".handler.HandlerActivity"
+                  />
         <activity
-            android:name=".handler.HandlerActivity"
+            android:name=".source.recyclerview.SourceRecyclerViewActivity"
             android:exported="true"
             >
             <intent-filter>
@@ -32,7 +34,12 @@
         <activity android:name=".coor.ConstraintLayoutActivity"></activity>
         <activity android:name=".scroll.ScrollToolbarActivity" />
         <activity
-            android:name=".flex.WordCloudActivity"
+            android:name=".viewpager.ViewPagerActivity"
+            android:exported="true"
+            />
+
+        <activity
+            android:name=".word.WordCloudActivity"
             android:exported="true"
             />
 
@@ -57,6 +64,11 @@
             android:name=".MainActivity"
             android:exported="true"
             />
+        <activity android:name=".tracker.TrackerActivity"></activity>
+        <activity
+            android:name=".flex.FlexboxActivity"
+            android:exported="true"
+            ></activity>
     </application>
 
 </manifest>

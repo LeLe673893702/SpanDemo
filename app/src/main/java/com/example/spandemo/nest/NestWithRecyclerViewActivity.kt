@@ -19,22 +19,25 @@ class NestWithRecyclerViewActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nest_with_recycler_view)
-        val textView = findViewById<View>(R.id.text1)
-        textView.post {
-
-            findViewById<AppBarLayout>(R.id.appbar_layout).let {
-                it.addOnOffsetChangedListener(AppBarLayout.BaseOnOffsetChangedListener<AppBarLayout> { appBarLayout, verticalOffset -> //                        //锚点位于顶部横向1/2, 纵向1/4位置
-                    //                        textView.pivotX = textView.width.toFloat() / 2
-                    textView.pivotY = textView.height.toFloat()
-
-                    ((textView.height - abs(verticalOffset)) / textView.height.toFloat()).run {
-                        textView.scaleX = this
-                        textView.scaleY = this
-                    }
-                })
+        val llContent = findViewById<LinearLayout>(R.id.ll_content)
+        llContent.apply {
+            for (i in 0 until this.childCount) {
+                getChildAt(i).visibility = View.GONE
             }
-        }
+            addView(TextView(context).apply {
+                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                setBackgroundColor(Color.RED)
+                gravity = Gravity.CENTER
+                post {
+                    ExpandTouchDelegateHelper((llContent.parent as? ViewGroup)!!, this, 500, 500, 500, 500).expandTouchDelegate()
 
-        supportFragmentManager.beginTransaction().add(R.id.fl_fragment, RecyclerViewFragment.newInstance()).commit()
+                }
+                text = "1231231321"
+                setOnClickListener {
+                    Log.d("NestWithRecyclerViewActivity", "click")
+                }
+            })
+        }
+//        supportFragmentManager.beginTransaction().add(R.id.fl_fragment, RecyclerViewFragment.newInstance()).commit()
     }
 }

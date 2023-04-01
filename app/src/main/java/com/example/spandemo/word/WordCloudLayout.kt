@@ -1,4 +1,4 @@
-package com.example.spandemo.flex
+package com.example.spandemo.word
 
 import android.content.Context
 import android.util.AttributeSet
